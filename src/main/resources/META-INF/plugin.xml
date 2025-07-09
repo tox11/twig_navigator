@@ -1,0 +1,56 @@
+<idea-plugin>
+    <id>com.twig5.navigator</id>
+    <name>Twig Navigator</name>
+    <version>1.0</version>
+    <vendor email="your.email@example.com" url="https://your-website.com">Your Name</vendor>
+    <!-- Compatible with PhpStorm 2024.1.3 -->
+    <idea-version since-build="241" until-build="251.*" />
+    <description>
+        <![CDATA[
+        Provides navigation between Twig templates and PHP files.
+        ]]>
+    </description>
+    <change-notes>
+        <![CDATA[
+        Initial version of the Twig Navigator plugin.
+        ]]>
+    </change-notes>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.jetbrains.php</depends>
+    <depends>com.jetbrains.twig</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Settings Page -->
+        <projectConfigurable
+                parentId="tools"
+                instance="com.twig5.settings.TwigSettingsConfigurable"
+                id="com.twig5.settings.TwigSettingsConfigurable"
+                displayName="Twig Navigator Settings"/>
+
+        <!-- Project-level service to store settings -->
+        <projectService
+                serviceImplementation="com.twig5.settings.TwigSettingsState"/>
+
+        <!-- Reference provider for PHP files -->
+        <psi.referenceContributor
+                language="PHP"
+                implementation="com.twig5.references.PhpTemplatePathReferenceContributor"/>
+
+        <!-- Reference provider for Twig files -->
+        <psi.referenceContributor
+                language="Twig"
+                implementation="com.twig5.references.TwigTemplateReferenceContributor"/>
+    </extensions>
+
+    <actions>
+        <!-- Action to open settings -->
+        <action id="TwigNavigator.OpenSettings"
+                class="com.twig5.actions.OpenSettingsAction"
+                text="Twig Navigator Settings..."
+                description="Open the settings for the Twig Navigator plugin.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+
+</idea-plugin>
