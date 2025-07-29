@@ -1,18 +1,24 @@
 <idea-plugin>
     <id>com.twig5.navigator</id>
     <name>Twig Navigator</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <vendor email="your.email@example.com" url="https://your-website.com">Your Name</vendor>
-    <!-- Compatible with PhpStorm 2024.1.3 -->
+    <!-- Compatible with recent PhpStorm versions -->
     <idea-version since-build="241" until-build="251.*" />
     <description>
         <![CDATA[
-        Provides navigation between Twig templates and PHP files.
+        Provides navigation between Twig templates and PHP files in PHP frameworks like Symfony.
+        Supports template path resolution in PHP methods (render, display, etc.) and Twig tags.
         ]]>
     </description>
     <change-notes>
         <![CDATA[
-        Initial version of the Twig Navigator plugin.
+        <h3>1.1 - Major Update</h3>
+        <ul>
+            <li>Added support for PHP template path resolution in render(), display() and similar methods</li>
+            <li>Improved template path resolution with support for both absolute and relative paths</li>
+            <li>Added settings for configuring template root directory</li>
+        </ul>
         ]]>
     </change-notes>
 
@@ -21,36 +27,59 @@
     <depends>com.jetbrains.twig</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Settings Page -->
+        <!-- Application-level services -->
+        <applicationService serviceImplementation="com.twig5.settings.AppSettingsState"/>
+        
+        <!-- Project-level services -->
+        <projectService
+                serviceImplementation="com.twig5.settings.TwigSettingsState"/>
+                
+        <!-- Reference providers -->
+        <psi.referenceContributor language="PHP" 
+                                implementation="com.twig5.references.PhpTemplatePathReferenceContributor"/>
+        <psi.referenceContributor language="Twig" 
+                                implementation="com.twig5.references.TwigTemplateReferenceContributor"/>
+        
+        <!-- Settings UI -->
         <projectConfigurable
                 parentId="tools"
                 instance="com.twig5.settings.TwigSettingsConfigurable"
                 id="com.twig5.settings.TwigSettingsConfigurable"
-                displayName="Twig Navigator Settings"/>
-
-        <!-- Project-level service to store settings -->
-        <projectService
-                serviceImplementation="com.twig5.settings.TwigSettingsState"/>
-
-        <!-- Reference provider for PHP files -->
-        <psi.referenceContributor
-                language="PHP"
-                implementation="com.twig5.references.PhpTemplatePathReferenceContributor"/>
-
-        <!-- Reference provider for Twig files -->
-        <psi.referenceContributor
-                language="Twig"
-                implementation="com.twig5.references.TwigTemplateReferenceContributor"/>
+                displayName="Twig Navigator"/>
     </extensions>
 
     <actions>
-        <!-- Action to open settings -->
         <action id="TwigNavigator.OpenSettings"
                 class="com.twig5.actions.OpenSettingsAction"
                 text="Twig Navigator Settings..."
-                description="Open the settings for the Twig Navigator plugin.">
+                description="Open the settings for the Twig Navigator plugin">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
     </actions>
-
+    
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Application-level services -->
+        <applicationService serviceImplementation="com.twig5.settings.AppSettingsState"/>
+        
+        <!-- Project-level services -->
+        <projectService
+                serviceImplementation="com.twig5.settings.TwigSettingsState"/>
+                
+        <!-- Reference providers -->
+        <psi.referenceContributor language="PHP" 
+                                implementation="com.twig5.references.PhpTemplatePathReferenceContributor"/>
+        <psi.referenceContributor language="Twig" 
+                                implementation="com.twig5.references.TwigTemplateReferenceContributor"/>
+        
+        <!-- Register project open activity -->
+        <postStartupActivity implementation="com.twig5.listeners.ProjectOpenActivity"/>
+        
+        <!-- Settings UI -->
+        <projectConfigurable
+                parentId="tools"
+                instance="com.twig5.settings.TwigSettingsConfigurable"
+                id="com.twig5.settings.TwigSettingsConfigurable"
+                displayName="Twig Navigator"/>
+    </extensions>
+    
 </idea-plugin>
