@@ -2,12 +2,12 @@
     <id>com.twig5.navigator</id>
     <name>Twig Navigator</name>
     <version>1.1</version>
-    <vendor email="your.email@example.com" url="https://your-website.com">Your Name</vendor>
+    <vendor email="anatolii.y.plugin@gmail.com">Anatolii Y</vendor>
     <!-- Compatible with recent PhpStorm versions -->
     <idea-version since-build="241" until-build="253.*" />
     <description>
         <![CDATA[
-        Provides navigation between Twig templates and PHP files in PHP frameworks like Symfony.
+        Provides navigation between Twig templates and PHP files in PHP frameworks like Symfony, CodeIgniter.
         Supports template path resolution in PHP methods (render, display, etc.) and Twig tags.
         ]]>
     </description>
