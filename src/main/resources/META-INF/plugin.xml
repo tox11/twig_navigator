@@ -4,7 +4,7 @@
     <version>1.1</version>
     <vendor email="your.email@example.com" url="https://your-website.com">Your Name</vendor>
     <!-- Compatible with recent PhpStorm versions -->
-    <idea-version since-build="241" until-build="251.*" />
+    <idea-version since-build="241" until-build="253.*" />
     <description>
         <![CDATA[
         Provides navigation between Twig templates and PHP files in PHP frameworks like Symfony.
@@ -31,15 +31,20 @@
         <applicationService serviceImplementation="com.twig5.settings.AppSettingsState"/>
         
         <!-- Project-level services -->
-        <projectService
-                serviceImplementation="com.twig5.settings.TwigSettingsState"/>
-                
+        <projectService serviceImplementation="com.twig5.settings.TwigSettingsState"/>
+
         <!-- Reference providers -->
-        <psi.referenceContributor language="PHP" 
+        <psi.referenceContributor language="PHP"
                                 implementation="com.twig5.references.PhpTemplatePathReferenceContributor"/>
-        <psi.referenceContributor language="Twig" 
+        <psi.referenceContributor language="Twig"
                                 implementation="com.twig5.references.TwigTemplateReferenceContributor"/>
-        
+
+        <!-- Goto declaration handler for Twig -->
+        <gotoDeclarationHandler implementation="com.twig5.references.TwigGotoDeclarationHandler"/>
+
+        <!-- Register project open activity -->
+        <postStartupActivity implementation="com.twig5.listeners.ProjectOpenActivity"/>
+
         <!-- Settings UI -->
         <projectConfigurable
                 parentId="tools"
@@ -56,30 +61,5 @@
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
     </actions>
-    
-    <extensions defaultExtensionNs="com.intellij">
-        <!-- Application-level services -->
-        <applicationService serviceImplementation="com.twig5.settings.AppSettingsState"/>
-        
-        <!-- Project-level services -->
-        <projectService
-                serviceImplementation="com.twig5.settings.TwigSettingsState"/>
-                
-        <!-- Reference providers -->
-        <psi.referenceContributor language="PHP" 
-                                implementation="com.twig5.references.PhpTemplatePathReferenceContributor"/>
-        <psi.referenceContributor language="Twig" 
-                                implementation="com.twig5.references.TwigTemplateReferenceContributor"/>
-        
-        <!-- Register project open activity -->
-        <postStartupActivity implementation="com.twig5.listeners.ProjectOpenActivity"/>
-        
-        <!-- Settings UI -->
-        <projectConfigurable
-                parentId="tools"
-                instance="com.twig5.settings.TwigSettingsConfigurable"
-                id="com.twig5.settings.TwigSettingsConfigurable"
-                displayName="Twig Navigator"/>
-    </extensions>
     
 </idea-plugin>

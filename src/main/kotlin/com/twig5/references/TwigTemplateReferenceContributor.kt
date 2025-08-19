@@ -6,8 +6,6 @@ import com.intellij.patterns.PatternCondition
 import com.intellij.psi.*
 import com.intellij.util.ProcessingContext
 import com.jetbrains.twig.TwigLanguage
-import com.jetbrains.twig.elements.TwigElementTypes
-import com.jetbrains.twig.elements.TwigTag
 import com.twig5.services.TemplateResolverService
 
 /**
@@ -15,17 +13,30 @@ import com.twig5.services.TemplateResolverService
  */
 class TwigTemplateReferenceContributor : PsiReferenceContributor() {
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
+        // Use raw string and \s to avoid unsupported escapes
+        val includeLike = Regex("""\{\%\s*(include|embed|extends|from|import)\b""", RegexOption.IGNORE_CASE)
+
         registrar.registerReferenceProvider(
             PlatformPatterns.psiElement()
-                .withParent(
-                    PlatformPatterns.psiElement()
-                        .with(object : PatternCondition<PsiElement>("TwigTagWithName") {
-                            override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
-                                return t is TwigTag && t.getTagName() in setOf("include", "embed", "extends", "from", "import")
+                .withLanguage(TwigLanguage.INSTANCE)
+                .with(object : PatternCondition<PsiElement>("TwigIncludeStringCompat") {
+                    override fun accepts(t: PsiElement, context: ProcessingContext?): Boolean {
+                        // Walk up a few levels to find a Twig tag text that matches include-like pattern
+                        var p: PsiElement? = t
+                        var depth = 0
+                        var inIncludeTag = false
+                        while (p != null && depth < 6) {
+                            val txt = p.text
+                            if (txt.contains("{%") && includeLike.containsMatchIn(txt)) {
+                                inIncludeTag = true
+                                break
                             }
-                        })
-                )
-                .withLanguage(TwigLanguage.INSTANCE),
+                            p = p.parent
+                            depth++
+                        }
+                        return inIncludeTag && t.textLength > 0
+                    }
+                }),
             TwigTemplateReferenceProvider()
         )
     }
@@ -36,9 +47,17 @@ class TwigTemplateReferenceContributor : PsiReferenceContributor() {
  */
 class TwigTemplateReferenceProvider : PsiReferenceProvider() {
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-        // The element is the STRING_LITERAL.
-        // We create a reference for its content.
-        val textRange = ElementManipulators.getValueTextRange(element)
+        val text = element.text
+        if (text.isBlank()) return PsiReference.EMPTY_ARRAY
+
+        // Compute inner range excluding surrounding quotes if present
+        val startsWithQuote = text.firstOrNull() == '\'' || text.firstOrNull() == '"'
+        val endsWithQuote = text.lastOrNull() == '\'' || text.lastOrNull() == '"'
+        val start = if (startsWithQuote) 1 else 0
+        val endExclusiveRaw = text.length - if (endsWithQuote && text.length > 1) 1 else 0
+        if (endExclusiveRaw <= start) return PsiReference.EMPTY_ARRAY
+        val textRange = TextRange(start, endExclusiveRaw)
+
         return arrayOf(TwigTemplateReference(element, textRange))
     }
 }
