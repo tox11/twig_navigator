@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.twig5.navigator</id>
     <name>Twig Navigator</name>
-    <version>1.1</version>
+    <version>1.0.1</version>
     <vendor email="anatolii.y.plugin@gmail.com">Anatolii Y</vendor>
     <!-- Compatible with recent PhpStorm versions -->
     <idea-version since-build="241" until-build="253.*" />
@@ -13,11 +13,9 @@
     </description>
     <change-notes>
         <![CDATA[
-        <h3>1.1 - Major Update</h3>
+        <h3>1.0.1 - Major Update</h3>
         <ul>
-            <li>Added support for PHP template path resolution in render(), display() and similar methods</li>
-            <li>Improved template path resolution with support for both absolute and relative paths</li>
-            <li>Added settings for configuring template root directory</li>
+            <li>free</li>
         </ul>
         ]]>
     </change-notes>
