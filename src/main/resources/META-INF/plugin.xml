@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.twig5.navigator</id>
     <name>Twig Navigator</name>
-    <version>1.0.2</version>
+    <version>1.0.4</version>
     <vendor email="anatolii.y.plugin@gmail.com">Anatolii Y</vendor>
     <!-- Compatible with recent PhpStorm versions -->
     <idea-version since-build="241" until-build="253.*" />
@@ -9,13 +9,22 @@
         <![CDATA[
         Provides navigation between Twig templates and PHP files in PHP frameworks like Symfony, CodeIgniter.
         Supports template path resolution in PHP methods (render, display, etc.) and Twig tags.
+        Navigate from Twig variables and method calls to PHP class definitions and methods using @var annotations.
         ]]>
     </description>
     <change-notes>
         <![CDATA[
-        <h3>1.0.2 - Major Update</h3>
+        <h3>1.0.3</h3>
         <ul>
-            <li>new icons</li>
+            <li><b>Navigate to PHP classes:</b> Cmd+Click on class names in {# @var ... #} comments to jump to PHP class definitions.</li>
+            <li><b>Navigate to PHP methods:</b> Cmd+Click on method calls (e.g., {{ info.run() }}) to jump to the method definition in the PHP class.</li>
+            <li><b>Navigate to variable definitions:</b> Cmd+Click on variables to jump to their @var annotation.</li>
+            <li><b>Flexible @var parsing:</b> Supports both @var name Type and @var Type name formats.</li>
+            <li><b>File path support:</b> Handles class references as file paths (e.g., \path\to\Action.php) in @var annotations.</li>
+        </ul>
+        <h3>1.0.2</h3>
+        <ul>
+            <li>Updated plugin icons</li>
         </ul>
         ]]>
     </change-notes>
@@ -36,6 +45,8 @@
                                 implementation="com.twig5.references.PhpTemplatePathReferenceContributor"/>
         <psi.referenceContributor language="Twig"
                                 implementation="com.twig5.references.TwigTemplateReferenceContributor"/>
+        <psi.referenceContributor language="Twig"
+                                implementation="com.twig5.references.TwigVarReferenceContributor"/>
 
         <!-- Goto declaration handler for Twig -->
         <gotoDeclarationHandler implementation="com.twig5.references.TwigGotoDeclarationHandler"/>

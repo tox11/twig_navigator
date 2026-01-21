@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.twig5"
-version = "1.0.2"
+version = "1.0.3"
 
 repositories {
     mavenCentral()
@@ -64,8 +64,8 @@ tasks {
         kotlinOptions {
             jvmTarget = "17"
             // Обновляем версии API и языка для соответствия версии плагина Kotlin
-            apiVersion = "2.0"
-            languageVersion = "2.0"
+            apiVersion = "1.9"
+            languageVersion = "1.9"
         }
     }
 
