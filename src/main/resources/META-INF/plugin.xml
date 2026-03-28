@@ -3,8 +3,8 @@
     <name>Twig Navigator</name>
     <version>1.0.4</version>
     <vendor email="anatolii.y.plugin@gmail.com">Anatolii Y</vendor>
-    <!-- Compatible with recent PhpStorm versions -->
-    <idea-version since-build="241" until-build="253.*" />
+    <!-- Patched by Gradle during build -->
+    <idea-version since-build="251" />
     <description>
         <![CDATA[
         Provides navigation between Twig templates and PHP files in PHP frameworks like Symfony, CodeIgniter.
