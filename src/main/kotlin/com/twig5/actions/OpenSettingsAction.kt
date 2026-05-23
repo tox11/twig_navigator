@@ -12,6 +12,9 @@ import com.twig5.settings.TwigSettingsConfigurable
 class OpenSettingsAction : AnAction(), DumbAware {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
+        
+        // Minor change to force new build output
+        val forceRebuild = true
 
         // Используем рекомендованный публичный API для отображения диалога настроек.
         // Этот метод специально предназначен для открытия настроек по классу Configurable.

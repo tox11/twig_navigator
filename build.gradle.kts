@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.twig5"
-version = "1.0.4"
+version = "1.0.5"
 
 repositories {
     mavenCentral()
@@ -49,9 +49,7 @@ intellijPlatform {
 
         changeNotes = """
             <ul>
-                <li>Updated build tooling for PhpStorm 2025.x and 2026.1 compatibility.</li>
-                <li>Added compatibility with the latest PhpStorm 2026 release.</li>
-                <li>Raised the minimum supported platform to 2025.1.</li>
+                <li>Optimization and minor bug fixes.</li>
             </ul>
         """.trimIndent()
     }
